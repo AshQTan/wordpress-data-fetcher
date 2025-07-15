@@ -43,14 +43,14 @@ def fetch_posts_by_date_range(start_date, end_date, header, per_page=100):
     end_date_iso = f"{end_date}T23:59:59Z"
     
     # List of publication post types to fetch
-    pub_types = ['posts', 'fact-sheet', 'decoded', 'short-read', 'quiz']
-    # Map to endpoint names (posts is 'posts', others are their slug)
+    pub_types = ['post-type-1', 'post-type-2', 'post-type-3', 'post-type-4', 'post-type-5']
+    # Map to endpoint names (usually the same as the post type slug)
     endpoint_map = {
-        'posts': 'posts',
-        'fact-sheet': 'fact-sheet',
-        'decoded': 'decoded',
-        'short-read': 'short-read',
-        'quiz': 'quiz',
+        'post-type-1': 'post-type-1',
+        'post-type-2': 'post-type-2',
+        'post-type-3': 'post-type-3',
+        'post-type-4': 'post-type-4',
+        'post-type-5': 'post-type-5',
     }
 
     def fetch_urls_from_endpoint(endpoint):

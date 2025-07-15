@@ -38,8 +38,6 @@ def build_wordpress_analytics_dataframe(start_date, end_date, header):
         'content': [],
         'label': [],
         'topics': [],
-        'primary_topic': [],
-        'research_teams': [],
         'word_count': [],
         'reading_level': []  # New column for reading grade level
     }
@@ -85,15 +83,6 @@ def build_wordpress_analytics_dataframe(start_date, end_date, header):
             topic_names = [topic.get('name', '') for topic in topics] if topics else []
             data['topics'].append(topic_names)
             
-            # Extract primary topic name
-            primary_topic = post_data.get('primary_topic', {})
-            data['primary_topic'].append(primary_topic.get('name', '') if primary_topic else '')
-            
-            # Extract research team names
-            research_teams = post_data.get('research_teams', [])
-            research_team_names = [team.get('name', '') for team in research_teams] if research_teams else []
-            data['research_teams'].append(research_team_names)
-            
             # Extract word count
             data['word_count'].append(post_data.get('word_count', 0))
             
@@ -114,8 +103,6 @@ def build_wordpress_analytics_dataframe(start_date, end_date, header):
             data['content'].append('')
             data['label'].append('')
             data['topics'].append([])
-            data['primary_topic'].append('')
-            data['research_teams'].append([])
             data['word_count'].append(0)
             data['reading_level'].append(None)  # Add None for reading level on error
     
@@ -146,7 +133,7 @@ def save_dataframe_to_csv(df, start_date, end_date):
         df_to_save = df.copy()
     
     # Flatten list columns for CSV compatibility
-    list_columns = ['topics', 'research_teams']
+    list_columns = ['topics']
     for col in list_columns:
         if col in df_to_save.columns:
             df_to_save[col] = df_to_save[col].apply(lambda x: ';'.join(x) if isinstance(x, list) else x)

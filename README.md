@@ -8,11 +8,30 @@ This project provides modular tools for fetching and analyzing WordPress content
 
 The project has been organized into the following modules:
 
-- `wordpress_fetcher/api.py`: Functions for interacting with the WordPress REST API
-- `wordpress_fetcher/content.py`: Tools for cleaning HTML content and analyzing reading level
-- `wordpress_fetcher/util.py`: Utility functions like URL pattern generation for analytics
-- `wordpress_fetcher/dataframe.py`: Data processing and manipulation functions
+- `api.py`: Functions for interacting with the WordPress REST API
+  - Handles all API requests to WordPress
+  - Fetches posts by date range
+  - Retrieves post analytics data
+  - Lists available post types
+  
+- `content.py`: Tools for cleaning HTML content and analyzing reading level
+  - Removes WordPress blocks and HTML tags from content
+  - Preserves meaningful text structure (lists, paragraphs)
+  - Calculates Flesch-Kincaid reading grade level
+  
+- `util.py`: Utility functions like URL pattern generation for analytics
+  - Creates regex patterns for URL matching in analytics platforms
+  - Processes URLs to extract meaningful patterns
+  
+- `dataframe.py`: Data processing and manipulation functions
+  - Builds structured DataFrames from WordPress content
+  - Handles error cases and exceptions
+  - Exports data to CSV with proper formatting
+  
 - `wordpress_fetcher.py`: Main script for fetching WordPress data by date range
+  - Provides command-line interface
+  - Manages credentials and authentication
+  - Orchestrates the data collection workflow
 
 ## Prerequisites
 
@@ -77,8 +96,6 @@ The analytics CSV contains the following columns:
 - `title`: The post title
 - `label`: The content label (if applicable)
 - `topics`: List of topics (semicolon-separated)
-- `primary_topic`: The primary topic (if applicable)
-- `research_teams`: List of research teams (semicolon-separated)
 - `word_count`: Number of words in the content
 - `reading_level`: Flesch-Kincaid grade level score
 
@@ -154,18 +171,38 @@ print(f"Data saved to {output_file}")
 
 ## Customizing for Your WordPress Site
 
+### Required WordPress Endpoints
+
+This script relies on the following WordPress REST API endpoints:
+
+1. **WordPress Core REST API** - for fetching posts by date:
+   - Path: `/wp-json/wp/v2/{post-type}`
+   - Methods: GET
+   - Parameters: `after`, `before`, `per_page`, `page`
+   - Example: `https://www.yourwebsite.com/wp-json/wp/v2/posts?after=2023-01-01T00:00:00Z`
+
+2. **Custom Analytics Endpoint** - for fetching detailed content analytics:
+   - Path: `/wp-json/prc-api/v3/analytics/query-by-url/`
+   - Methods: POST
+   - Body: JSON object with URL parameter
+   - Example: `{"url": "https://www.yourwebsite.com/example-post/"}`
+
+To use this script with your WordPress site, you need to either:
+1. Ensure these endpoints exist on your site, or
+2. Modify the code to use the endpoints available on your site
+
 ### Modifying Post Types
 
-Edit the `pub_types` and `endpoint_map` variables in `wordpress_fetcher/api.py` to match the post types available on your WordPress site:
+Edit the `pub_types` and `endpoint_map` variables in `api.py` to match the post types available on your WordPress site:
 
 ```python
-pub_types = ['posts', 'fact-sheet', 'decoded', 'short-read', 'quiz']
+pub_types = ['post-type-1', 'post-type-2', 'post-type-3', 'post-type-4', 'post-type-5']
 endpoint_map = {
-    'posts': 'posts',
-    'fact-sheet': 'fact-sheet',
-    'decoded': 'decoded',
-    'short-read': 'short-read',
-    'quiz': 'quiz',
+    'post-type-1': 'post-type-1',
+    'post-type-2': 'post-type-2',
+    'post-type-3': 'post-type-3',
+    'post-type-4': 'post-type-4',
+    'post-type-5': 'post-type-5',
 }
 ```
 
@@ -177,7 +214,7 @@ python wordpress_fetcher.py --list-types
 
 ### Changing API Endpoints
 
-If your WordPress site uses different API endpoints, modify the URLs in `wordpress_fetcher/api.py`:
+If your WordPress site uses different API endpoints, modify the URLs in `api.py`:
 
 ```python
 queryurl = 'https://www.yourwebsite.com/wp-json/prc-api/v3/analytics/query-by-url/'
