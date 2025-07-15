@@ -15,7 +15,7 @@ def fetch_wordpress_analytics(url, header):
     Returns:
         dict: JSON response from the WordPress API
     """
-    queryurl = 'https://www.yourwebsite.com/wp-json/prc-api/v3/analytics/query-by-url/'
+    queryurl = 'https://www.yourwebsite.com/wp-json/site-api/v3/analytics/query-by-url/'
     
     try:
         response = requests.post(queryurl, json={'url': url}, headers=header)

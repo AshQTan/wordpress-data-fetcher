@@ -182,7 +182,7 @@ This script relies on the following WordPress REST API endpoints:
    - Example: `https://www.yourwebsite.com/wp-json/wp/v2/posts?after=2023-01-01T00:00:00Z`
 
 2. **Custom Analytics Endpoint** - for fetching detailed content analytics:
-   - Path: `/wp-json/prc-api/v3/analytics/query-by-url/`
+   - Path: `/wp-json/site-api/v3/analytics/query-by-url/`
    - Methods: POST
    - Body: JSON object with URL parameter
    - Example: `{"url": "https://www.yourwebsite.com/example-post/"}`
@@ -217,7 +217,7 @@ python wordpress_fetcher.py --list-types
 If your WordPress site uses different API endpoints, modify the URLs in `api.py`:
 
 ```python
-queryurl = 'https://www.yourwebsite.com/wp-json/prc-api/v3/analytics/query-by-url/'
+queryurl = 'https://www.yourwebsite.com/wp-json/site-api/v3/analytics/query-by-url/'
 ```
 
 ## WordPress REST API Authentication
