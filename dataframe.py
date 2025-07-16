@@ -1,9 +1,13 @@
+#!/usr/bin/env python3
 """
 DataFrame creation and manipulation functions for WordPress data.
 """
 import pandas as pd
 import time
 import csv
+import argparse
+import os
+import base64
 
 from api import fetch_posts_by_date_range, fetch_wordpress_analytics
 from content import clean_html_content, analyze_reading_level
@@ -143,3 +147,48 @@ def save_dataframe_to_csv(df, start_date, end_date):
     print(f"Data saved to {output_filename}")
     
     return output_filename
+
+def print_help():
+    """Print help information for dataframe functions."""
+    print("\n=== DataFrame Functions Help ===\n")
+    print("Functions for building and managing DataFrames from WordPress data\n")
+    print("build_wordpress_analytics_dataframe(start_date, end_date, header)")
+    print("  Builds a complete DataFrame with analytics data for posts in date range\n")
+    print("save_dataframe_to_csv(df, start_date, end_date)")
+    print("  Saves a DataFrame to CSV with proper handling of complex data types\n")
+    print("Example:")
+    print("  from dataframe import build_wordpress_analytics_dataframe, save_dataframe_to_csv")
+    print("  df = build_wordpress_analytics_dataframe('2023-01-01', '2023-02-01', header)")
+    print("  save_dataframe_to_csv(df, '2023-01-01', '2023-02-01')")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="DataFrame Functions for WordPress Data")
+    parser.add_argument('--help', action='store_true', help='Show detailed help for this module')
+    parser.add_argument('--start-date', metavar='DATE', help='Start date in YYYY-MM-DD format')
+    parser.add_argument('--end-date', metavar='DATE', help='End date in YYYY-MM-DD format')
+    args = parser.parse_args()
+    
+    if args.help:
+        print_help()
+    elif args.start_date and args.end_date:
+        from dotenv import load_dotenv
+        # Load credentials from environment variables
+        load_dotenv()
+        wordpress_user = os.environ.get('WORDPRESS_USER')
+        wordpress_password = os.environ.get('WORDPRESS_PASSWORD')
+        
+        if not wordpress_user or not wordpress_password:
+            print("Error: WordPress credentials not found in environment variables")
+            print("Please create a .env file with WORDPRESS_USER and WORDPRESS_PASSWORD")
+            exit(1)
+        
+        # Create authentication header
+        wordpress_credentials = wordpress_user + ":" + wordpress_password
+        wordpress_token = base64.b64encode(wordpress_credentials.encode())
+        header = {'Authorization': 'Basic ' + wordpress_token.decode('utf-8')}
+        
+        print(f"Building DataFrame for posts from {args.start_date} to {args.end_date}...")
+        df = build_wordpress_analytics_dataframe(args.start_date, args.end_date, header)
+        save_dataframe_to_csv(df, args.start_date, args.end_date)
+    else:
+        print_help()

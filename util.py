@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
 """
 Utility functions for WordPress data processing.
 """
 import re
+import argparse
 
 def create_url_regex_pattern(url):
     """
@@ -37,3 +39,27 @@ def create_url_regex_pattern(url):
     regex_pattern = f"{escaped_url}"
     
     return regex_pattern
+
+def print_help():
+    """Print help information for utility functions."""
+    print("\n=== Utility Functions Help ===\n")
+    print("Utility functions for URL processing and other tasks\n")
+    print("create_url_regex_pattern(url)")
+    print("  Creates a regex pattern for matching URLs in analytics platforms\n")
+    print("Example:")
+    print("  from util import create_url_regex_pattern")
+    print("  pattern = create_url_regex_pattern('https://www.yourwebsite.com/2023/01/post-name/')")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Utility Functions for WordPress Data")
+    parser.add_argument('--help', action='store_true', help='Show detailed help for this module')
+    parser.add_argument('--url', metavar='URL', help='Create a regex pattern for the given URL')
+    args = parser.parse_args()
+    
+    if args.help:
+        print_help()
+    elif args.url:
+        pattern = create_url_regex_pattern(args.url)
+        print(f"Regex pattern: {pattern}")
+    else:
+        print_help()

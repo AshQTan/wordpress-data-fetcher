@@ -1,8 +1,10 @@
+#!/usr/bin/env python3
 """
 WordPress API functions for fetching content from a WordPress site.
 """
 import time
 import requests
+import argparse
 
 def fetch_wordpress_analytics(url, header):
     """
@@ -116,3 +118,27 @@ def list_public_post_types():
     except Exception as e:
         print(f"Error fetching post types: {e}")
         return []
+
+def print_help():
+    """Print help information for API functions."""
+    print("\n=== WordPress API Functions Help ===\n")
+    print("Functions for interacting with the WordPress REST API\n")
+    print("fetch_wordpress_analytics(url, header)")
+    print("  Fetches analytics data for a specific URL from WordPress\n")
+    print("fetch_posts_by_date_range(start_date, end_date, header, per_page=100)")
+    print("  Fetches all post URLs within a specified date range\n")
+    print("list_public_post_types()")
+    print("  Lists all public post types available via the WordPress REST API\n")
+    
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="WordPress API Functions")
+    parser.add_argument('--help', action='store_true', help='Show detailed help for this module')
+    parser.add_argument('--list-types', action='store_true', help='List available post types')
+    args = parser.parse_args()
+    
+    if args.help:
+        print_help()
+    elif args.list_types:
+        list_public_post_types()
+    else:
+        print_help()

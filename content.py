@@ -1,8 +1,10 @@
+#!/usr/bin/env python3
 """
 Content processing functions for WordPress content.
 """
 import re
 import html
+import argparse
 from readability import Readability as PyReadability
 
 def clean_html_content(html_content):
@@ -117,3 +119,33 @@ def analyze_reading_level(text):
     except Exception as e:
         print(f"Error analyzing reading level: {str(e)}")
         return None
+
+def print_help():
+    """Print help information for content processing functions."""
+    print("\n=== Content Processing Functions Help ===\n")
+    print("Tools for cleaning HTML content and analyzing reading level\n")
+    print("clean_html_content(html_content)")
+    print("  Removes HTML tags, WordPress blocks, and formatting from content\n")
+    print("analyze_reading_level(text)")
+    print("  Analyzes text and returns the Flesch-Kincaid grade level score\n")
+    print("Example:")
+    print("  from content import clean_html_content, analyze_reading_level")
+    print("  clean_text = clean_html_content('<p>Some HTML content</p>')")
+    print("  grade_level = analyze_reading_level(clean_text)")
+    
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Content Processing Functions for WordPress")
+    parser.add_argument('--help', action='store_true', help='Show detailed help for this module')
+    parser.add_argument('--clean', metavar='HTML', help='Clean HTML content and print the result')
+    parser.add_argument('--analyze', metavar='TEXT', help='Analyze reading level of text')
+    args = parser.parse_args()
+    
+    if args.help:
+        print_help()
+    elif args.clean:
+        print(clean_html_content(args.clean))
+    elif args.analyze:
+        grade = analyze_reading_level(args.analyze)
+        print(f"Reading grade level: {grade}")
+    else:
+        print_help()

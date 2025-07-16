@@ -79,6 +79,24 @@ To see all available post types from your WordPress site:
 python wordpress_fetcher.py --list-types
 ```
 
+### Getting Help for Each Module
+
+Each script has built-in help functionality:
+
+```bash
+# Main script help options for specific modules
+python wordpress_fetcher.py --help-api        # Show API functions help
+python wordpress_fetcher.py --help-content    # Show content processing functions help
+python wordpress_fetcher.py --help-util       # Show utility functions help
+python wordpress_fetcher.py --help-dataframe  # Show dataframe functions help
+
+# Direct module help
+python api.py --help        # API module help
+python content.py --help    # Content processing module help
+python util.py --help       # Utility module help
+python dataframe.py --help  # DataFrame module help
+```
+
 ## Output Files
 
 The script generates two files:
