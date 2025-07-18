@@ -33,6 +33,12 @@ The project has been organized into the following modules:
   - Manages credentials and authentication
   - Orchestrates the data collection workflow
 
+- `wordpress_topic_fetcher.py`: Script for fetching WordPress posts by topic tags
+  - Filters posts by specified topic tags
+  - Supports multiple topics with comma-separated list
+  - Lists all available topics in your WordPress site
+  - Works within a specified date range
+
 ## Prerequisites
 
 - Python 3.6+
@@ -77,6 +83,22 @@ To see all available post types from your WordPress site:
 
 ```bash
 python wordpress_fetcher.py --list-types
+```
+
+### Fetching Content by Topic Tags
+
+The topic fetcher script allows you to fetch WordPress content that matches specific topic tags:
+
+```bash
+python wordpress_topic_fetcher.py --start-date 2024-01-01 --end-date 2024-03-31 --topics science,technology
+```
+
+### Listing Available Topics
+
+To see all available topics/tags in your WordPress site:
+
+```bash
+python wordpress_topic_fetcher.py --list-topics
 ```
 
 ### Getting Help for Each Module
